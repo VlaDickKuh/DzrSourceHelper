@@ -9,9 +9,6 @@ from config import CITY
 from config import DOCUMENT_ID
 from utils import rgb_to_hex
 
-from dotenv import load_dotenv
-load_dotenv()
-
 
 
 def remove_empty_content(node):
@@ -19,7 +16,7 @@ def remove_empty_content(node):
         if 'content' in node:
             node['content'] = node['content'].rstrip()
             if not node['content'].strip():
-                del node['content']
+                node['content'] = None
         
         if 'tables' in node:
             node['tables'] = [table for table in node['tables'] 
@@ -32,7 +29,7 @@ def remove_empty_content(node):
                 remove_empty_content(node[key])
                 
                 if isinstance(node[key], dict) and not node[key]:
-                    del node[key]
+                    node[key] = None
         
 
 def extract_table_data(table_element):
@@ -176,6 +173,8 @@ def get_gdoc():
     except HttpError as err:
         print(err)
         return None
+    with open(f"{document.get("title")}.json", "w", encoding="utf-8") as f:
+        json.dump(document, f, ensure_ascii=False, indent=4)
     print(f"Название дока: {document.get("title")}")
     
     tabs = []

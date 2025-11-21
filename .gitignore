@@ -3,3 +3,5 @@ __pycache__/
 credentials.json
 .env
 *.log
+build/
+main.spec

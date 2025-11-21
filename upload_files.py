@@ -32,8 +32,10 @@ def upload_files_to_source():
         resp = session.post(FILES_UPLOAD_URL, cookies=resp_cook.cookies, data=data, files=files)
         if "#message.upload_ok" in resp.text:
             print(f"Файл {file} загружен")
+        elif "#error.file_exists" in resp.text:
+           print(f"Файл {file} уже загружен") 
         else:
-           print(f"Файл {file} не загружен") 
+           print(f"Файл {file} не загружен")
            print(resp.text)
 
 

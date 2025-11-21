@@ -3,6 +3,7 @@ def encode_text(text: str) -> str:
                .replace("\ufeff", "") \
                .replace("\u000b", "") \
                .replace("”", "\"") \
+               .replace("“", "\"") \
                .encode("windows-1251")
 
 
