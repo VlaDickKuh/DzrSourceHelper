@@ -184,7 +184,7 @@ def test_doc(g_doc_datas: dict, add: bool) -> bool:
                     has_error = True
 
             if g_doc_data.get(title).get("Бонусный:").get("content") is None: 
-                print(f"Не прописаны настроки основной/бонусный в уровне {title}")
+                print(f"Не прописаны настройки основной/бонусный в уровне {title}")
                 has_error = True
 
     return has_error
