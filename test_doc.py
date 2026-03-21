@@ -188,6 +188,8 @@ def test_doc(g_doc_datas: dict, add: bool) -> bool:
 
             if g_doc_data.get(title).get("Комментарий и фото кодов:").get("content") is None:
                 print(f"Нет комментариев к '{title}'")
+            if g_doc_data.get(title).get("Бонусный:").get("content") is None: 
+                print(f"Не прописаны настройки основной/бонусный в уровне {title}")
                 has_error = True
 
     return has_error
