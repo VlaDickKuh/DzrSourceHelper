@@ -1,3 +1,5 @@
+from loguru import logger
+
 def check_codes_repeat(g_doc_datas: dict):
     for g_doc_data in g_doc_datas:
         for title in g_doc_data:
@@ -7,189 +9,189 @@ def check_codes_repeat(g_doc_datas: dict):
 
 def test_doc(g_doc_datas: dict, add: bool) -> bool:
     has_error = False
-    print("Проверяю гугл док")
+    logger.info("Проверяю гугл док")
     for g_doc_data in g_doc_datas:
         for title in g_doc_data:
-            print(f"Проверяю '{title}'")
+            logger.info(f"Проверяю '{title}'")
             if not add:
                 if g_doc_data.get(title).get("ID Уровня:") is None:
-                    print(f"Нет айди '{title}'")
+                    logger.warning(f"Нет айди '{title}'")
                     has_error = True
                 elif g_doc_data.get(title).get("ID Уровня:").get("content") is None: 
-                    print(f"Нет айди '{title}'")
+                    logger.warning(f"Нет айди '{title}'")
                     has_error = True
                 else:
                     try:
                         int(g_doc_data.get(title).get("ID Уровня:").get("content"))
-                        print(f"ID: {g_doc_data.get(title).get("ID Уровня:").get("content")}")
+                        logger.info(f"ID: {g_doc_data.get(title).get("ID Уровня:").get("content")}")
                     except:
-                        print(f"Неверно прописан айди '{title}'. Впиши только число")
+                        logger.warning(f"Неверно прописан айди '{title}'. Впиши только число")
                         has_error = True
             
             if g_doc_data.get(title).get("Сквозной:").get("content") is None: 
-                print(f"Не прописаны настройки основной/сквозной в '{title}'")
+                logger.warning(f"Не прописаны настройки основной/сквозной в '{title}'")
                 has_error = True
             
             if g_doc_data.get(title).get("Бонусный:").get("content") is None: 
-                print(f"Не прописаны настроки основной/бонусный в '{title}'")
+                logger.warning(f"Не прописаны настроки основной/бонусный в '{title}'")
                 has_error = True
 
             if g_doc_data.get(title).get("Текст уровня:").get("Текст:").get("content") is None: 
-                print(f"Нет текста задания в '{title}'")
+                logger.warning(f"Нет текста задания в '{title}'")
                 has_error = True
             
             if g_doc_data.get(title).get("Текст уровня:").get("Примечания:").get("content") is None:
-                print(f"Нет текста примечаний в '{title}'")
+                logger.warning(f"Нет текста примечаний в '{title}'")
                 has_error = True
             
             if g_doc_data.get(title).get("Подсказка 1:").get("Текст:").get("content") is None:
-                print(f"Нет текста первой подсказки в '{title}'")
+                logger.warning(f"Нет текста первой подсказки в '{title}'")
                 has_error = True
             
             if g_doc_data.get(title).get("Подсказка 2:").get("Текст:").get("content") is None:
-                print(f"Нет текста второй подсказки в '{title}'")
+                logger.warning(f"Нет текста второй подсказки в '{title}'")
                 has_error = True
             
             if g_doc_data.get(title).get("Сквозной:").get("content").lower() == "да":
                 if g_doc_data.get(title).get("Подсказка 1:").get("Выдавать по запросу:").get("content") is None:
-                    print(f"Не прописана выдача первой подсказки по запросу в '{title}'")
+                    logger.warning(f"Не прописана выдача первой подсказки по запросу в '{title}'")
                     has_error = True
                 if g_doc_data.get(title).get("Подсказка 1:").get("Штраф за использование:").get("content") is None:
-                    print(f"Не прописан штраф за использование первой подсказки в '{title}'")
+                    logger.warning(f"Не прописан штраф за использование первой подсказки в '{title}'")
                     has_error = True
                 else:
                     try:
                         int(g_doc_data.get(title).get("Подсказка 1:").get("Штраф за использование:").get("content"))
                     except:
-                        print(f"Неверно прописан штраф за использование первой подсказки в '{title}'. Впиши только число")
+                        logger.warning(f"Неверно прописан штраф за использование первой подсказки в '{title}'. Впиши только число")
                         has_error = True
 
                 if g_doc_data.get(title).get("Подсказка 2:").get("Выдавать по запросу:").get("content") is None:
-                    print(f"Не прописана выдача второй подсказки по запросу в '{title}'")
+                    logger.warning(f"Не прописана выдача второй подсказки по запросу в '{title}'")
                     has_error = True
                 if g_doc_data.get(title).get("Подсказка 2:").get("Штраф за использование:").get("content") is None:
-                    print(f"Не прописан штраф за использование второй подсказки в '{title}'")
+                    logger.warning(f"Не прописан штраф за использование второй подсказки в '{title}'")
                     has_error = True
                 else:
                     try:
                         int(g_doc_data.get(title).get("Подсказка 2:").get("Штраф за использование:").get("content"))
                     except:
-                        print(f"Неверно прописан штраф за использование второй подсказки в '{title}'. Впиши только число")
+                        logger.warning(f"Неверно прописан штраф за использование второй подсказки в '{title}'. Впиши только число")
                         has_error = True                
             
             else:
                 if g_doc_data.get(title).get("Подсказка 1:").get("Время до подсказки:").get("content") is None:
-                    print(f"Нет тайминга первой подсказки в '{title}'")
+                    logger.warning(f"Нет тайминга первой подсказки в '{title}'")
                     has_error = True
                 else:
                     try:
                         int(g_doc_data.get(title).get("Подсказка 1:").get("Время до подсказки:").get("content"))
                     except:
-                        print(f"Неверно прописан тайминг первой подсказки в '{title}'. Впиши только число")
+                        logger.warning(f"Неверно прописан тайминг первой подсказки в '{title}'. Впиши только число")
                         has_error = True
             
                 if g_doc_data.get(title).get("Подсказка 2:").get("Время до подсказки:").get("content") is None:
-                    print(f"Нет тайминга второй подсказки в '{title}'")
+                    logger.warning(f"Нет тайминга второй подсказки в '{title}'")
                     has_error = True
                 else:
                     try:
                         int(g_doc_data.get(title).get("Подсказка 2:").get("Время до подсказки:").get("content"))
                     except:    
-                        print(f"Неверно прописан тайминг второй подсказки в '{title}'. Впиши только число")
+                        logger.warning(f"Неверно прописан тайминг второй подсказки в '{title}'. Впиши только число")
                         has_error = True
 
             if g_doc_data.get(title).get("Время до окончания уровня:").get("content") is None:
-                print(f"Нет тайминга до автоперехода в '{title}'")
+                logger.warning(f"Нет тайминга до автоперехода в '{title}'")
                 has_error = True
             else:
                 try:
                     int(g_doc_data.get(title).get("Время до окончания уровня:").get("content"))
                 except:
-                    print(f"Неверно прописан тайминг до автоперехода в '{title}'. Впиши только число")
+                    logger.warning(f"Неверно прописан тайминг до автоперехода в '{title}'. Впиши только число")
                     has_error = True
 
 
             if g_doc_data.get(title).get("Основные коды уровня:") is None:
-                print(f"Нет таблицы основных кодов в '{title}'")
+                logger.warning(f"Нет таблицы основных кодов в '{title}'")
                 has_error = True
             else:
                 for i, code in enumerate(g_doc_data.get(title).get("Основные коды уровня:").get("tables")[0][1:]):
                     if code[1] == "":
-                        print(f"Нет кода {i+1} в '{title}'")
+                        logger.warning(f"Нет кода {i+1} в '{title}'")
                         has_error = True
                     if code[2] not in ["1", "1+", "2", "2+", "3", "3+", "null"]:
-                        print(f"Неверно прописан кс кода {i+1} в '{title}'")
+                        logger.warning(f"Неверно прописан кс кода {i+1} в '{title}'")
                         has_error = True
             if g_doc_data.get(title).get("Сектора на уровне:"):
                 for i, sec in enumerate(g_doc_data.get(title).get("Сектора на уровне:").get("tables")[0][1:]):
                     if sec[1] == "":
-                        print(f"Нет названия сектора {i+1} в '{title}'")
+                        logger.warning(f"Нет названия сектора {i+1} в '{title}'")
                         has_error = True
 
             if g_doc_data.get(title).get("Количество кодов для взятия:").get("Вышка:").get("content") is None:
-                print(f"Нет количества кодов для взятия в '{title}'")
+                logger.warning(f"Нет количества кодов для взятия в '{title}'")
                 has_error = True
             else:
                 try:
                     int(g_doc_data.get(title).get("Количество кодов для взятия:").get("Вышка:").get("content"))
                 except:
-                    print(f"Неверно прописано количество кодов для взятия в '{title}'. Впиши только число")
+                    logger.warning(f"Неверно прописано количество кодов для взятия в '{title}'. Впиши только число")
                     has_error = True
             
             if g_doc_data.get(title).get("Спойлеры:"):
                 for i, spoiler in enumerate(g_doc_data.get(title).get("Спойлеры:")):
                     if i == 0: continue
                     if g_doc_data.get(title).get("Спойлеры:").get(f"Спойлер {i}:").get("Текст:").get("content") is None:
-                        print(f"Нет текста спойлера {i} в '{title}'")
+                        logger.warning(f"Нет текста спойлера {i} в '{title}'")
                         has_error = True
                     if g_doc_data.get(title).get("Спойлеры:").get(f"Спойлер {i}:").get("Ответы на спойлер:").get("content") is None:
-                        print(f"Нет ответа спойлера {i} в '{title}'")  
+                        logger.warning(f"Нет ответа спойлера {i} в '{title}'")  
                         has_error = True
             
             if g_doc_data.get(title).get("Бонусные коды уровня:"):
                 for i, bonus in enumerate(g_doc_data.get(title).get("Бонусные коды уровня:").get("tables")[0][1:]):    
                     if bonus[1] == "":
-                        print(f"Нет бонусного кода {i+1} в '{title}'")
+                        logger.warning(f"Нет бонусного кода {i+1} в '{title}'")
                     if bonus[2] not in ["1", "1+", "2", "2+", "3", "3+", "null"]:
-                        print(f"Неверно прописан кс бонусного кода {i+1} в '{title}'")
+                        logger.warning(f"Неверно прописан кс бонусного кода {i+1} в '{title}'")
                     try:
                         int(bonus[3])
                     except:
-                        print(f"Неверно прописан бонус к коду {i+1} в '{title}'. Впиши только число")
+                        logger.warning(f"Неверно прописан бонус к коду {i+1} в '{title}'. Впиши только число")
                 if not g_doc_data.get(title).get("Бонус за полное взятие:"):
-                    print(f"Нет бонуса на полное взятие бонусов в '{title}'")
+                    logger.warning(f"Нет бонуса на полное взятие бонусов в '{title}'")
                     has_error = True
                 elif g_doc_data.get(title).get("Бонус за полное взятие:").get("content") is None:
-                    print(f"Не прописан бонус на полное взятие бонусов в '{title}'")
+                    logger.warning(f"Не прописан бонус на полное взятие бонусов в '{title}'")
                     has_error = True
                 else:
                     try:
                         int(g_doc_data.get(title).get("Бонус за полное взятие:").get("content"))
                     except:
-                        print(f"Неверно прописан бонус на полное взятие бонусов в '{title}'. Впиши только число")
+                        logger.warning(f"Неверно прописан бонус на полное взятие бонусов в '{title}'. Впиши только число")
                         has_error = True
             if g_doc_data.get(title).get("Штрафные коды уровня:"):
                 for i, bonus in enumerate(g_doc_data.get(title).get("Штрафные коды уровня:").get("tables")[0][1:]):    
                     if bonus[1] == "":
-                        print(f"Нет штрафного кода {i+1} в '{title}'")
+                        logger.warning(f"Нет штрафного кода {i+1} в '{title}'")
                     try:
                         int(bonus[2])
                     except:
-                        print(f"Неверно прописан штраф к коду {i+1} в '{title}'. Впиши только число")
+                        logger.warning(f"Неверно прописан штраф к коду {i+1} в '{title}'. Впиши только число")
             if g_doc_data.get(title).get("Штраф за слив:").get("content") is None:
-                print(f"Не прописан штраф за слив в '{title}'")
+                logger.warning(f"Не прописан штраф за слив в '{title}'")
                 has_error = True
             else:
                 try:
                     int(g_doc_data.get(title).get("Штраф за слив:").get("content"))
                 except:
-                    print(f"Неверно прописан штраф за слив в '{title}'. Впиши только число") 
+                    logger.warning(f"Неверно прописан штраф за слив в '{title}'. Впиши только число") 
                     has_error = True
 
             if g_doc_data.get(title).get("Комментарий и фото кодов:").get("content") is None:
-                print(f"Нет комментариев к '{title}'")
+                logger.warning(f"Нет комментариев к '{title}'")
             if g_doc_data.get(title).get("Бонусный:").get("content") is None: 
-                print(f"Не прописаны настройки основной/бонусный в уровне {title}")
+                logger.warning(f"Не прописаны настройки основной/бонусный в уровне {title}")
                 has_error = True
 
     return has_error

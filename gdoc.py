@@ -1,5 +1,6 @@
 import json
 
+from loguru import logger
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
@@ -171,11 +172,11 @@ def get_gdoc():
     try:
         document = service.documents().get(documentId=DOCUMENT_ID, includeTabsContent=True).execute()
     except HttpError as err:
-        print(err)
+        logger.error(err)
         return None
-    with open(f"{document.get("title")}.json", "w", encoding="utf-8") as f:
-        json.dump(document, f, ensure_ascii=False, indent=4)
-    print(f"Название дока: {document.get("title")}")
+    # with open(f"{document.get("title")}.json", "w", encoding="utf-8") as f:
+    #     json.dump(document, f, ensure_ascii=False, indent=4)
+    logger.info(f"Название дока: {document.get("title")}")
     
     tabs = []
     for tab in document.get('tabs')[3:]:

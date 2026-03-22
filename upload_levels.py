@@ -1,4 +1,5 @@
-import os
+from loguru import logger
+import questionary
 
 from config import S_URL
 from config import GAME_ID
@@ -33,7 +34,7 @@ $(document).ready(function() {
     tec_level["skvoz"] = "on"
 
 
-    print("Заливаю технический уровень")
+    logger.info("Заливаю технический уровень")
     headers = {
     "accept-language": "ru,en;q=0.9,de;q=0.8",
     "content-type": "application/x-www-form-urlencoded; charset=windows-1251",
@@ -41,29 +42,28 @@ $(document).ready(function() {
     session = get_session()
     s_resp = session.post(S_URL, data=tec_level, headers=headers)
     if s_resp.status_code != 200:
-        print(f"Технический уровень не залит")
-        print(f"\Код ошибки {s_resp.status_code}")
+        logger.warning(f"Технический уровень не залит")
+        logger.warning(f"Код ошибки {s_resp.status_code}")
     else:
-        print(f"Технический уровень залит")
+        logger.info(f"Технический уровень залит")
 
 
 def upload_levels(add = True) -> None:
-    inp = input("Загрузить файлы из гугл диска в движок\n[1] Да\n[2] Нет\n")
-    if int(inp) == 1:
+    if questionary.confirm("Загрузить файлы из гугл диска в движок?", default=False).ask():
         upload_files_to_source()
 
-    print("Получаю данные из гугл дока")
+    logger.info("Получаю данные из гугл дока")
     g_doc_datas = get_gdoc()
     if g_doc_datas == None:
-        print("Данные из гуглдока не получены\nНажми любую клавишу для выхода")
-    print("Данные из гугл дока получены")
+        logger.warning("Данные из гуглдока не получены\nНажми любую клавишу для выхода")
+    logger.info("Данные из гугл дока получены")
 
     if test_doc(g_doc_datas, add): 
-        input("Есть ошибки в доке. Заливка невозможна\nНажми любую клавишу для продолжения")
+        logger.warning("Есть ошибки в доке. Заливка невозможна\nНажми любую клавишу для продолжения")
         return None
-        
-    inp = input("Ошибок нет\n[1] Продолжить\n[4] Выйти в главное меню\n")
-    if int(inp) != 4:
+    
+    logger.info("Ошибок нет\n")
+    if questionary.confirm("Продолжить?", default=False).ask():
         for g_doc_data in g_doc_datas:
             level_data = {}
 
@@ -114,8 +114,9 @@ def upload_levels(add = True) -> None:
                 
                 if g_doc_data.get(title).get("Спойлеры:"):
                     for i, spoiler in enumerate(g_doc_data.get(title).get("Спойлеры:")):
-                        level_data[f"spoiler[{i+1}]"] = encode_text(g_doc_data.get(title).get("Спойлеры:").get(f"Спойлер {i+1}:").get("Текст:").get("content"))
-                        level_data[f"spoilerCode[{i+1}]"] = encode_text(g_doc_data.get(title).get("Спойлеры:").get(f"Спойлер {i+1}:").get("Ответы на спойлер:").get("content"))   
+                        if spoiler == "content": continue
+                        level_data[f"spoiler[{i}]"] = encode_text(g_doc_data.get(title).get("Спойлеры:").get(f"Спойлер {i}:").get("Текст:").get("content"))
+                        level_data[f"spoilerCode[{i}]"] = encode_text(g_doc_data.get(title).get("Спойлеры:").get(f"Спойлер {i}:").get("Ответы на спойлер:").get("content"))   
                 
                 level_data["penalty"] = g_doc_data.get(title).get("Штраф за слив:").get("content")
                 
@@ -125,7 +126,7 @@ def upload_levels(add = True) -> None:
 
             if not add and int(level_data["id"]) == 0:
                 continue
-            print(f"Заливаю уровень '{level_data["title"].decode('cp1251')}'")
+            logger.info(f"Заливаю уровень '{level_data["title"].decode('cp1251')}'")
             headers = {
                 "accept-language": "ru,en;q=0.9,de;q=0.8",
                 "content-type": "application/x-www-form-urlencoded; charset=windows-1251",
@@ -133,13 +134,13 @@ def upload_levels(add = True) -> None:
             session = get_session()
             s_resp = session.post(S_URL, headers=headers, data=level_data)
             if s_resp.status_code != 200:
-                print(f"Уровень '{level_data["title"].decode('cp1251')}' не залит")
-                print(f"Код ошибки {s_resp.status_code}")
+                logger.warning(f"Уровень '{level_data["title"].decode('cp1251')}' не залит")
+                logger.warning(f"Код ошибки {s_resp.status_code}")
             else:
-                print(f"Уровень '{level_data["title"].decode('cp1251')}' залит")
+                logger.info(f"Уровень '{level_data["title"].decode('cp1251')}' залит")
         if add:
             upload_tech_level()
 
-        input("Загрузка завершена\nНажми любую клавишу для продолжения")
+        questionary.text("Загрузка завершена\nНажми любую клавишу для продолжения").ask()
     else:
         return None

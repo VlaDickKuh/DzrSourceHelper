@@ -1,5 +1,6 @@
 import io
 
+from loguru import logger
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
 from googleapiclient.http import MediaIoBaseDownload
@@ -27,14 +28,14 @@ def get_files_from_drive(service, folder_id):
         item_id = item['id']
 
         if 'image' in item['mimeType']:
-            print(f'Найден файл: {item_name}')
+            logger.info(f'Найден файл: {item_name}')
             with io.BytesIO() as file_stream:
                 request = service.files().get_media(fileId=item_id)
                 downloader = MediaIoBaseDownload(file_stream, request)
                 done = False
                 while done is False:
                     status, done = downloader.next_chunk()
-                    print(f'Скачивание {item_name}: {int(status.progress() * 100)}%')
+                    logger.info(f'Скачивание {item_name}: {int(status.progress() * 100)}%')
                 files_binaries[item_name] = file_stream.getvalue()
     
     return files_binaries
