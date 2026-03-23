@@ -164,7 +164,7 @@ def parse_content(content):
 
 def get_gdoc():
     SCOPES = ['https://www.googleapis.com/auth/documents.readonly']
-    SERVICE_ACCOUNT_FILE = 'credentials.json'
+    SERVICE_ACCOUNT_FILE = 'secrets/credentials.json'
 
     credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=SCOPES)
     service = build('docs', 'v1', credentials=credentials)

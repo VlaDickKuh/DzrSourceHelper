@@ -11,7 +11,7 @@ from upload_files import upload_files_to_source
 
 
 
-def upload_tech_level() -> None:
+def upload_tech_level() -> bool:
     tec_level = {}
     tec_level["category"] = GAME_ID
     tec_level["action"] =  "add_zadanie"
@@ -44,8 +44,10 @@ $(document).ready(function() {
     if s_resp.status_code != 200:
         logger.warning(f"Технический уровень не залит")
         logger.warning(f"Код ошибки {s_resp.status_code}")
+        return True
     else:
-        logger.info(f"Технический уровень залит")
+        logger.success(f"Технический уровень залит")
+        return False
 
 
 def upload_levels(add = True) -> None:
@@ -56,14 +58,15 @@ def upload_levels(add = True) -> None:
     g_doc_datas = get_gdoc()
     if g_doc_datas == None:
         logger.warning("Данные из гуглдока не получены\nНажми любую клавишу для выхода")
-    logger.info("Данные из гугл дока получены")
+    logger.success("Данные из гугл дока получены")
 
     if test_doc(g_doc_datas, add): 
         logger.warning("Есть ошибки в доке. Заливка невозможна\nНажми любую клавишу для продолжения")
         return None
     
-    logger.info("Ошибок нет\n")
+    logger.success("Ошибок нет")
     if questionary.confirm("Продолжить?", default=False).ask():
+        has_error = False
         for g_doc_data in g_doc_datas:
             level_data = {}
 
@@ -136,11 +139,18 @@ def upload_levels(add = True) -> None:
             if s_resp.status_code != 200:
                 logger.warning(f"Уровень '{level_data["title"].decode('cp1251')}' не залит")
                 logger.warning(f"Код ошибки {s_resp.status_code}")
+                has_error = True
             else:
-                logger.info(f"Уровень '{level_data["title"].decode('cp1251')}' залит")
+                logger.success(f"Уровень '{level_data["title"].decode('cp1251')}' залит")
+        
         if add:
-            upload_tech_level()
+            has_error = upload_tech_level()
+        
+        if has_error:
+            logger.warning("Загрузка завершена с ошибками")
+        else:
+            logger.success("Загрузка завершена без ошибок")
 
-        questionary.text("Загрузка завершена\nНажми любую клавишу для продолжения").ask()
+        questionary.text("Нажми любую клавишу для продолжения").ask()
     else:
         return None

@@ -1,3 +1,4 @@
+import sys
 import questionary
 from loguru import logger
 
@@ -6,7 +7,9 @@ from upload_files import upload_files_to_source
 
 
 
-logger.add("log.log", level="ERROR")
+logger.remove()
+logger.add("log/log.log", level="ERROR")
+logger.add(sys.stderr, format="<level>{level}</level>: <level>{message}</level>", colorize=True)
 
 
 def main():
