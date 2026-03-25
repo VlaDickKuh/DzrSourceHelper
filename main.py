@@ -2,17 +2,21 @@ import sys
 import questionary
 from loguru import logger
 
+from config import check_config_files
 from upload_levels import upload_levels
 from upload_files import upload_files_to_source
 
 
 
 logger.remove()
-logger.add("log/log.log", level="ERROR")
-logger.add(sys.stderr, format="<level>{level}</level>: <level>{message}</level>", colorize=True)
+logger.add("log/error.log", level="ERROR")
+logger.add(sys.stderr, format="<level>{level}</level>: <level>{message}</level>", colorize=True, level="DEBUG")
 
 
 def main():
+    if not check_config_files():
+        return None
+    
     choices=["Добавить задания с нуля", "Обновить существующие уровни", "Закачать файлы из гугл диска в движок", "Выйти из программы"]
     while True:
         try:
