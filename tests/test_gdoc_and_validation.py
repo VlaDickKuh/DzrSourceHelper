@@ -1,9 +1,9 @@
 import importlib
 import types
 
-import gdoc
-import test_doc
-import download_files
+import src.gdoc as gdoc
+import src.test_doc as test_doc
+import src.download_files as download_files
 
 
 def test_parse_content_handles_styles_and_tables():

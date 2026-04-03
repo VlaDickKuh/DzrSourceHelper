@@ -1,7 +1,7 @@
 from loguru import logger
 
-from download_files import authenticate
-from download_files import get_files_from_drive
+from src.download_files import authenticate
+from src.download_files import get_files_from_drive
 from config import get_session
 from config import FOLDER_ID
 from config import S_URL

@@ -1,15 +1,22 @@
+import os
 import sys
+from datetime import datetime
+
 import questionary
 from loguru import logger
 
 from config import check_config_files
-from upload_levels import upload_levels
-from upload_files import upload_files_to_source
+from src.upload_levels import upload_levels
+from src.upload_files import upload_files_to_source
 
 
 
+run_timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+info_log_file = f"log/info_{run_timestamp}.log"
+error_log_file = f"log/error_{run_timestamp}.log"
 logger.remove()
-logger.add("log/error.log", level="ERROR")
+logger.add(error_log_file, level="ERROR")
+logger.add(info_log_file, level="INFO", filter=lambda record: record["level"].name not in ("ERROR", "CRITICAL"))
 logger.add(sys.stderr, format="<level>{level}</level>: <level>{message}</level>", colorize=True, level="DEBUG")
 
 
@@ -21,6 +28,7 @@ def main():
     while True:
         try:
             action = questionary.select("Выберите действие:", choices=choices).ask()
+            os.system("cls")
             if action == choices[0]:
                 upload_levels(True)
             if action == choices[1]:

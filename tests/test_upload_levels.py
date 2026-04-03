@@ -1,7 +1,7 @@
 import builtins
 from types import SimpleNamespace
 
-import upload_levels
+import src.upload_levels as upload_levels
 
 
 class DummyResponse:

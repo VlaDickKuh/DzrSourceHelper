@@ -1,4 +1,4 @@
-import upload_files
+import src.upload_files as upload_files
 
 
 class DummyResponse:

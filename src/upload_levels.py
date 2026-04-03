@@ -4,12 +4,12 @@ import questionary
 from config import S_URL
 from config import GAME_ID
 from config import get_session
-from gdoc import get_gdoc
-from gdoc_const import *
-from utils import encode_text
-from test_doc import test_doc
-from test_doc import test_doc_headers
-from upload_files import upload_files_to_source
+from src.gdoc import get_gdoc
+from src.gdoc_const import *
+from src.utils import encode_text
+from src.test_doc import test_doc
+from src.test_doc import test_doc_headers
+from src.upload_files import upload_files_to_source
 
 
 

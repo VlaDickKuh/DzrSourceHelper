@@ -1,6 +1,6 @@
 import pytest
 
-import utils
+import src.utils as utils
 
 
 def test_encode_text_replaces_newlines_and_removes_control_characters():

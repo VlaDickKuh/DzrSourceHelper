@@ -9,6 +9,8 @@ load_dotenv("secrets/.env")
 
 
 
+Path("secrets").mkdir(parents=True, exist_ok=True)
+
 def check_config_files():
     env_path = Path("secrets/.env")
     if not env_path.exists():

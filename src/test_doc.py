@@ -1,4 +1,4 @@
-from gdoc_const import *
+from src.gdoc_const import *
 
 from loguru import logger
 
@@ -23,6 +23,9 @@ def test_doc_headers(g_doc_datas: dict) -> bool:
                 has_error = True
             if g_doc_data.get(title).get(BONUS) is None:
                 logger.warning(f"Нет заголовка '{BONUS}' в '{title}'")
+                has_error = True
+            elif g_doc_data.get(title).get(BONUS).get(BONUS_TIME) is None:
+                logger.warning(f"Нет подзаголовка '{BONUS_TIME}' в  заголовке '{BONUS}' в '{title}'")
                 has_error = True
             if g_doc_data.get(title).get(SKVOZ) is None:
                 logger.warning(f"Нет заголовка '{SKVOZ}' в '{title}'")
@@ -130,9 +133,15 @@ def test_doc(g_doc_datas: dict, add: bool) -> bool:
             if g_doc_data.get(title).get(SKVOZ).get(CONTENT) is None: 
                 logger.warning(f"Не прописаны настройки основной/сквозной в '{title}'")
                 has_error = True
+            elif g_doc_data.get(title).get(SKVOZ).get(CONTENT).lower() not in ["да", "нет"]:
+                logger.warning(f"Неправильно прописаны настройки основной/сквозной в '{title}'. Только 'да' или 'нет'")
+                has_error = True
             
             if g_doc_data.get(title).get(BONUS).get(CONTENT) is None: 
                 logger.warning(f"Не прописаны настройки основной/бонусный в '{title}'")
+                has_error = True
+            elif g_doc_data.get(title).get(BONUS).get(CONTENT).lower() not in ["да", "нет"]:
+                logger.warning(f"Неправильно прописаны настройки основной/бонусный в '{title}'. Только 'да' или 'нет'")
                 has_error = True
 
             if g_doc_data.get(title).get(LEVEL_TEXT).get(TEXT).get(CONTENT) is None: 

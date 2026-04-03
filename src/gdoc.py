@@ -8,7 +8,7 @@ from googleapiclient.errors import HttpError
 from config import GAME_ID
 from config import CITY
 from config import DOCUMENT_ID
-from utils import rgb_to_hex
+from src.utils import rgb_to_hex
 
 
 
