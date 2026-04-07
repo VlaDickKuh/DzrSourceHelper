@@ -4,13 +4,34 @@ setlocal enabledelayedexpansion
 
 set VENV_DIR=.venv
 set REQUIREMENTS=requirements.txt
+set SECRETS_DIR=secrets
+set ENV_FILE=%SECRETS_DIR%\.env
 
-:: Проверка наличия Python
 where python >nul 2>nul
 if %errorlevel% neq 0 (
     echo Python не найден. Установите Python и добавьте его в PATH.
     pause
     exit /b 1
+)
+
+if not exist %SECRETS_DIR% (
+    echo Создание папки %SECRETS_DIR%...
+    mkdir %SECRETS_DIR%
+)
+
+if not exist %ENV_FILE% (
+    echo Создание файла %ENV_FILE% с настройками по умолчанию...
+    (
+        echo LOGIN=your_login
+        echo PASSWORD=your_password
+        echo CITY=your_city
+        echo GAME_ID=your_game_id
+        echo DOCUMENT_ID=your_document_id
+        echo FOLDER_ID=your_folder_id
+    ) > %ENV_FILE%
+    echo Файл %ENV_FILE% создан. Отредактируйте его перед запуском скрипта.
+) else (
+    echo Файл %ENV_FILE% уже существует. Пропускаем создание.
 )
 
 if not exist %VENV_DIR% (

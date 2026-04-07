@@ -27,6 +27,7 @@ def test_doc_headers(g_doc_datas: dict) -> bool:
             elif g_doc_data.get(title).get(BONUS).get(BONUS_TIME) is None:
                 logger.warning(f"Нет подзаголовка '{BONUS_TIME}' в  заголовке '{BONUS}' в '{title}'")
                 has_error = True
+                
             if g_doc_data.get(title).get(SKVOZ) is None:
                 logger.warning(f"Нет заголовка '{SKVOZ}' в '{title}'")
                 has_error = True
