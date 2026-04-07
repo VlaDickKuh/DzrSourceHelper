@@ -144,6 +144,17 @@ def test_doc(g_doc_datas: dict, add: bool) -> bool:
             elif g_doc_data.get(title).get(BONUS).get(CONTENT).lower() not in ["да", "нет"]:
                 logger.warning(f"Неправильно прописаны настройки основной/бонусный в '{title}'. Только 'да' или 'нет'")
                 has_error = True
+            elif g_doc_data.get(title).get(BONUS).get(CONTENT).lower() == "да":
+                if g_doc_data.get(title).get(BONUS).get(BONUS_TIME).get(CONTENT) is None:
+                    logger.warning(f"Не прописано время бонуса уровня в '{title}'")
+                    has_error = True
+                else:
+                    try:
+                        int(g_doc_data.get(title).get(BONUS).get(BONUS_TIME).get(CONTENT))
+                    except:    
+                        logger.warning(f"Неверно прописан бонус уровня в '{title}'. Впиши только число")
+                        has_error = True
+
 
             if g_doc_data.get(title).get(LEVEL_TEXT).get(TEXT).get(CONTENT) is None: 
                 logger.warning(f"Нет текста задания в '{title}'")
